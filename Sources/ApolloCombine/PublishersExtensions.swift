@@ -302,4 +302,54 @@ public extension Publishers {
       subscriber = nil
     }
   }
+
+    // MARK: - Clear Cache
+    struct ApolloClearCache: Publisher {
+        public typealias Output = Void
+        public typealias Failure = Error
+
+        private let configuration: ApolloClearCacheConfiguration
+
+        public init(with configuration: ApolloClearCacheConfiguration) {
+            self.configuration = configuration
+        }
+
+        public func receive<S: Subscriber>(subscriber: S) where Failure == S.Failure, Output == S.Input {
+            let subscription = ApolloClearCacheSubscription(subscriber: subscriber, configuration: configuration)
+            subscriber.receive(subscription: subscription)
+        }
+    }
+
+    struct ApolloClearCacheConfiguration {
+        let client: ApolloClient
+        let queue: DispatchQueue
+    }
+
+    private class ApolloClearCacheSubscription<S: Subscriber> : Subscription
+    where S.Failure == Error, S.Input == Void {
+
+        private let configuration: ApolloClearCacheConfiguration
+        var subscriber: S?
+
+        init(subscriber: S?, configuration:ApolloClearCacheConfiguration) {
+            self.subscriber = subscriber
+            self.configuration = configuration
+        }
+
+        func request(_ demand: Subscribers.Demand) {
+            configuration.client.clearCache(callbackQueue: configuration.queue) { result in
+                switch result {
+                case .success():
+                    _ = self.subscriber?.receive()
+                    self.subscriber?.receive(completion: .finished)
+                case .failure(let error):
+                    self.subscriber?.receive(completion: .failure(error))
+                }
+            }
+        }
+
+        func cancel() {
+            subscriber = nil
+        }
+    }
 }

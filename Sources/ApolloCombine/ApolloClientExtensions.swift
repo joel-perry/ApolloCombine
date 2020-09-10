@@ -75,5 +75,16 @@ public extension ApolloClient {
     let config = Publishers.ApolloSubscribeConfiguration(client: self, subscription: subscription, queue: queue)
     return Publishers.ApolloSubscribe(with: config)
   }
+
+    /// Request to clear the cache
+    ///
+    /// - Parameters:
+    /// - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
+    /// - Returns: A publisher that delivers results from the cache operaion.
+    func clearCachePublisher(queue: DispatchQueue = .main) -> Publishers.ApolloClearCache {
+        let configuration = Publishers.ApolloClearCacheConfiguration(client: self,
+                                                                     queue: queue)
+        return Publishers.ApolloClearCache(with: configuration)
+    }
 }
 

@@ -325,7 +325,7 @@ public extension Publishers {
         let queue: DispatchQueue
     }
 
-    private class ApolloClearCacheSubscription<S: Subscriber> : Subscription
+    private final class ApolloClearCacheSubscription<S: Subscriber> : Subscription
     where S.Failure == Error, S.Input == Void {
 
         private let configuration: ApolloClearCacheConfiguration

@@ -337,13 +337,13 @@ public extension Publishers {
         }
 
         func request(_ demand: Subscribers.Demand) {
-            configuration.client.clearCache(callbackQueue: configuration.queue) { result in
+            configuration.client.clearCache(callbackQueue: configuration.queue) { [weak self] result in
                 switch result {
                 case .success():
-                    _ = self.subscriber?.receive()
-                    self.subscriber?.receive(completion: .finished)
+                    _ = self?.subscriber?.receive()
+                    self?.subscriber?.receive(completion: .finished)
                 case .failure(let error):
-                    self.subscriber?.receive(completion: .failure(error))
+                    self?.subscriber?.receive(completion: .failure(error))
                 }
             }
         }

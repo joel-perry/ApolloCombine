@@ -19,7 +19,6 @@ let package = Package(
              url: "https://github.com/apollographql/apollo-ios.git", from: "0.28.0")
   ],
   targets: [
-    .target(name: "ApolloCombine", dependencies: [.product(name: "Apollo", package: "Apollo")]),
-    .testTarget(name: "ApolloCombineTests", dependencies: ["ApolloCombine"])
+    .target(name: "ApolloCombine", dependencies: [.product(name: "Apollo", package: "Apollo")])
   ]
 )

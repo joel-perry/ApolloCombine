@@ -14,9 +14,9 @@ public extension ApolloClient {
   /// - Returns: A publisher that delivers results from the fetch operaion.
   func fetchPublisher<Query: GraphQLQuery>(query: Query,
                                            cachePolicy: CachePolicy = .returnCacheDataElseFetch,
-                                           context: UnsafeMutableRawPointer? = nil,
+                                           contextIdentifier: UUID? = nil,
                                            queue: DispatchQueue = .main) -> Publishers.ApolloFetch<Query> {
-    let config = Publishers.ApolloFetchConfiguration(client: self, query: query, cachePolicy: cachePolicy, context: context, queue: queue)
+    let config = Publishers.ApolloFetchConfiguration(client: self, query: query, cachePolicy: cachePolicy, contextIdentifier: contextIdentifier, queue: queue)
     return Publishers.ApolloFetch(with: config)
   }
   
@@ -28,9 +28,8 @@ public extension ApolloClient {
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the perform operaion.
   func performPublisher<Mutation: GraphQLMutation>(mutation: Mutation,
-                                                   context: UnsafeMutableRawPointer? = nil,
                                                    queue: DispatchQueue = .main) -> Publishers.ApolloPerform<Mutation> {
-    let config = Publishers.ApolloPerformConfiguration(client: self, mutation: mutation, context: context, queue: queue)
+    let config = Publishers.ApolloPerformConfiguration(client: self, mutation: mutation, queue: queue)
     return Publishers.ApolloPerform(with: config)
   }
   
@@ -43,10 +42,9 @@ public extension ApolloClient {
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the upload operaion.
   func uploadPublisher<Operation: GraphQLOperation>(operation: Operation,
-                                                    context: UnsafeMutableRawPointer? = nil,
                                                     files: [GraphQLFile],
                                                     queue: DispatchQueue = .main) -> Publishers.ApolloUpload<Operation> {
-    let config = Publishers.ApolloUploadConfiguration(client: self, operation: operation, context: context, files: files, queue: queue)
+    let config = Publishers.ApolloUploadConfiguration(client: self, operation: operation, files: files, queue: queue)
     return Publishers.ApolloUpload(with: config)
   }
   
@@ -58,9 +56,8 @@ public extension ApolloClient {
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the watch operaion.
   func watchPublisher<Query: GraphQLQuery>(query: Query,
-                                           cachePolicy: CachePolicy = .returnCacheDataElseFetch,
-                                           queue: DispatchQueue = .main) -> Publishers.ApolloWatch<Query> {
-    let config = Publishers.ApolloWatchConfiguration(client: self, query: query, cachePolicy: cachePolicy, queue: queue)
+                                           cachePolicy: CachePolicy = .returnCacheDataElseFetch) -> Publishers.ApolloWatch<Query> {
+    let config = Publishers.ApolloWatchConfiguration(client: self, query: query, cachePolicy: cachePolicy)
     return Publishers.ApolloWatch(with: config)
   }
   

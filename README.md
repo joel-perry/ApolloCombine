@@ -5,6 +5,9 @@
 
 A collection of Combine publishers for the [Apollo iOS client](https://github.com/apollographql/apollo-ios).
 
+## A note about the Apollo iOS client beta
+The Apollo iOS client is undergoing some large changes in the networking stack. Consequently, ApolloCombine will need some reworking to interface correctly with the new client. I have started a branch called 'apollo-beta' to perform these changes and will do my best to keep it in synch with the client betas.
+
 ## Usage
 The extension to ApolloClient (in the aptly named `ApolloClientExtensions`) includes methods whose inputs mirror the existing ApolloClient operation methods. Instead of including a result handler, though, these methods return Combine publishers that deliver the results of the operation to subscribers.
 

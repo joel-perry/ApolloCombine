@@ -5,6 +5,12 @@
 
 A collection of Combine publishers for the [Apollo iOS client](https://github.com/apollographql/apollo-ios).
 
+## Versions
+The Apollo iOS client uses a new networking stack beginning with 0.34.0-beta2, so the version of ApolloCombine you should use depends on whether you have adopted this change.
+
+- Use ApolloCombine release 0.2.2 if you have not upgraded to the new networking stack
+- Use ApolloCombine release 0.3.0 and above if you are using the new networking stack
+
 ## Usage
 The extension to ApolloClient (in the aptly named `ApolloClientExtensions`) includes methods whose inputs mirror the existing ApolloClient operation methods. Instead of including a result handler, though, these methods return Combine publishers that deliver the results of the operation to subscribers.
 

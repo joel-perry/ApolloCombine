@@ -6,7 +6,7 @@
 A collection of Combine publishers for the [Apollo iOS client](https://github.com/apollographql/apollo-ios).
 
 ## Versions
-The Apollo iOS client uses a new networking stack beginning with 0.34.0-beta2, so the version of ApolloCombine you should use depends on whether you have adopted this change.
+The Apollo iOS client uses a new networking stack beginning with 0.34.0, so the version of ApolloCombine you should use depends on whether you have adopted this change.
 
 - Use ApolloCombine release 0.2.2 if you have not upgraded to the new networking stack
 - Use ApolloCombine release 0.3.0 and above if you are using the new networking stack
@@ -16,7 +16,7 @@ The extension to ApolloClient (in the aptly named `ApolloClientExtensions`) incl
 
 When `cancel()` is invoked on a subscription, the underlying Apollo operation is also cancelled.
 
-`fetchPublisher`, `performPublisher`, and `uploadPublisher` subscriptions will send `.finished` completions whey they are done.
+`fetchPublisher`, `performPublisher`, `uploadPublisher`, and `clearCachePublisher` will send a completion when the operation has completed.
 
 ```swift
 import ApolloCombine
@@ -34,6 +34,30 @@ let fetchSubscription = client.fetchPublisher(query: MyQuery(), cachePolicy: .fe
 fetchSubscription.cancel()
 
 ```
+
+`watchPublisher` and `subscribePublisher` will not send a completion, instead delivering data and errors as the value of the subscription. This allows these operations to remain open after an error has been encountered. As such, it is important to explicitly cancel these subscriptions when you are done with them to avoid memory leaks.
+
+```swift
+import ApolloCombine
+
+let client = ApolloClient(...)
+
+let watchSubscription = client.watchPublisher(query: MyQuery())
+  .sink(receiveValue: { operationResult in
+    switch operationResult {
+    case .success(let graphQLResult):
+      // handle returned data
+    	
+    case .failure(let error): 
+      // handle error     
+  })
+
+// Don't forget to cancel when you're done
+watchSubscription.cancel()
+
+```
+
+
 ## Installation
 ### Swift Package Manager
 The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. Use Xcode’s Swift Packages option, which is located within the File menu.

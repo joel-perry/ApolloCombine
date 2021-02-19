@@ -189,8 +189,8 @@ public extension Publishers {
   
   // MARK: - Watch
   struct ApolloWatch<Query: GraphQLQuery>: Publisher {
-    public typealias Output = GraphQLResult<Query.Data>
-    public typealias Failure = Error
+    public typealias Output = Result<GraphQLResult<Query.Data>, Error>
+    public typealias Failure = Never
     
     private let configuration: ApolloWatchConfiguration<Query>
     
@@ -211,7 +211,7 @@ public extension Publishers {
   }
   
   private final class ApolloWatchSubscription<S: Subscriber, Query: GraphQLQuery>: Subscription
-  where S.Failure == Error, S.Input == GraphQLResult<Query.Data> {
+  where S.Failure == Never, S.Input == Result<GraphQLResult<Query.Data>, Error> {
     private let configuration: ApolloWatchConfiguration<Query>
     private var subscriber: S?
     private var task: GraphQLQueryWatcher<Query>?
@@ -225,13 +225,7 @@ public extension Publishers {
       task = configuration.client.watch(query: configuration.query,
                                         cachePolicy: configuration.cachePolicy)
       { [weak self] result in
-        switch result {
-        case .success(let data):
-          _ = self?.subscriber?.receive(data)
-          
-        case .failure(let error):
-          self?.subscriber?.receive(completion: .failure(error))
-        }
+        _ = self?.subscriber?.receive(result)
       }
     }
     
@@ -244,8 +238,8 @@ public extension Publishers {
   
   // MARK: - Subscribe
   struct ApolloSubscribe<Subscription: GraphQLSubscription>: Publisher {
-    public typealias Output = GraphQLResult<Subscription.Data>
-    public typealias Failure = Error
+    public typealias Output = Result<GraphQLResult<Subscription.Data>, Error>
+    public typealias Failure = Never
     
     private let configuration: ApolloSubscribeConfiguration<Subscription>
     
@@ -266,7 +260,7 @@ public extension Publishers {
   }
   
   private final class ApolloSubscribeSubscription<S: Subscriber, Sub: GraphQLSubscription>: Subscription
-  where S.Failure == Error, S.Input == GraphQLResult<Sub.Data> {
+  where S.Failure == Never, S.Input == Result<GraphQLResult<Sub.Data>, Error> {
     private let configuration: ApolloSubscribeConfiguration<Sub>
     private var subscriber: S?
     private var task: Apollo.Cancellable?
@@ -280,13 +274,7 @@ public extension Publishers {
       task = configuration.client.subscribe(subscription: configuration.subscription,
                                             queue: configuration.queue)
       { [weak self] result in
-        switch result {
-        case .success(let data):
-          _ = self?.subscriber?.receive(data)
-          
-        case .failure(let error):
-          self?.subscriber?.receive(completion: .failure(error))
-        }
+        _ = self?.subscriber?.receive(result)
       }
     }
     

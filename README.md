@@ -62,5 +62,12 @@ watchSubscription.cancel()
 ### Swift Package Manager
 The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. Use Xcode’s Swift Packages option, which is located within the File menu.
 
+### CocoaPods
+ApolloCombine is available through [CocoaPods](https://cocoapods.org/). To install it, simply add the following line in your `Podfile`
+
+```
+pod 'ApolloCombine'
+```
+
 ## License
 ApolloCombine is released under the MIT license. [See LICENSE](LICENSE) for details.

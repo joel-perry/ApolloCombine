@@ -1,6 +1,7 @@
 # ApolloCombine
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/joel-perry/ApolloCombine)
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+![Cocoapods](https://img.shields.io/cocoapods/v/ApolloCombine)
 ![GitHub](https://img.shields.io/github/license/joel-perry/ApolloCombine)
 
 A collection of Combine publishers for the [Apollo iOS client](https://github.com/apollographql/apollo-ios).

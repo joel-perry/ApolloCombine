@@ -13,7 +13,7 @@ The Apollo iOS client uses a new networking stack beginning with 0.34.0, so the 
 - Use ApolloCombine release 0.3.0 and above if you are using the new networking stack
 
 ## Usage
-The extension to ApolloClient (in the aptly named `ApolloClientExtensions`) includes methods whose inputs mirror the existing ApolloClient operation methods. Instead of including a result handler, though, these methods return Combine publishers that deliver the results of the operation to subscribers.
+The extension to ApolloClientProtocol (in the aptly named `ApolloClientExtensions`) includes methods whose inputs mirror the existing ApolloClientProtocol operation methods. Instead of including a result handler, though, these methods return Combine publishers that deliver the results of the operation to subscribers.
 
 When `cancel()` is invoked on a subscription, the underlying Apollo operation is also cancelled.
 

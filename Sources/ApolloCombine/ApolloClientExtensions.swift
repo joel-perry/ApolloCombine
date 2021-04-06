@@ -2,16 +2,16 @@ import Apollo
 import Combine
 import Foundation
 
-public extension ApolloClient {
+public extension ApolloClientProtocol {
   
   /// Fetches a query from the server or from the local cache, depending on the current contents of the cache and the specified cache policy.
   ///
   /// - Parameters:
   ///   - query: The query to fetch.
-  ///   - cachePolicy: A cache policy that specifies when results should be fetched from the server and when data should be loaded from the local cache.
-  ///   - context: [optional] A context to use for the cache to work with results. Defaults to nil.
+  ///   - cachePolicy: A cache policy that specifies when results should be fetched from the server and when data should be loaded from the local cache. Defaults to ``.returnCacheDataElseFetch`.
+  ///   - contextIdentifier: [optional] A unique identifier for this request, to help with deduping cache hits for watchers. Defaults to `nil`.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
-  /// - Returns: A publisher that delivers results from the fetch operaion.
+  /// - Returns: A publisher that delivers results from the fetch operation.
   func fetchPublisher<Query: GraphQLQuery>(query: Query,
                                            cachePolicy: CachePolicy = .returnCacheDataElseFetch,
                                            contextIdentifier: UUID? = nil,
@@ -24,12 +24,13 @@ public extension ApolloClient {
   ///
   /// - Parameters:
   ///   - mutation: The mutation to perform.
-  ///   - context: [optional] A context to use for the cache to work with results. Defaults to nil.
+  ///   - publishResultToStore: If `true`, this will publish the result returned from the operation to the cache store. Default is `true`.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
-  /// - Returns: A publisher that delivers results from the perform operaion.
+  /// - Returns: A publisher that delivers results from the perform operation.
   func performPublisher<Mutation: GraphQLMutation>(mutation: Mutation,
+                                                   publishResultToStore: Bool = true,
                                                    queue: DispatchQueue = .main) -> Publishers.ApolloPerform<Mutation> {
-    let config = Publishers.ApolloPerformConfiguration(client: self, mutation: mutation, queue: queue)
+    let config = Publishers.ApolloPerformConfiguration(client: self, mutation: mutation, publishResultToStore: publishResultToStore, queue: queue)
     return Publishers.ApolloPerform(with: config)
   }
   
@@ -37,10 +38,9 @@ public extension ApolloClient {
   ///
   /// - Parameters:
   ///   - operation: The operation to send
-  ///   - context: [optional] A context to use for the cache to work with results. Should default to nil.
   ///   - files: An array of `GraphQLFile` objects to send.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
-  /// - Returns: A publisher that delivers results from the upload operaion.
+  /// - Returns: A publisher that delivers results from the upload operation.
   func uploadPublisher<Operation: GraphQLOperation>(operation: Operation,
                                                     files: [GraphQLFile],
                                                     queue: DispatchQueue = .main) -> Publishers.ApolloUpload<Operation> {
@@ -52,9 +52,8 @@ public extension ApolloClient {
   ///
   /// - Parameters:
   ///   - query: The query to watch.
-  ///   - cachePolicy: A cache policy that specifies when results should be fetched from the server or from the local cache.
-  ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
-  /// - Returns: A publisher that delivers results from the watch operaion.
+  ///   - cachePolicy: A cache policy that specifies when results should be fetched from the server or from the local cache. Defaults to ``.returnCacheDataElseFetch`.
+  /// - Returns: A publisher that delivers results from the watch operation.
   func watchPublisher<Query: GraphQLQuery>(query: Query,
                                            cachePolicy: CachePolicy = .returnCacheDataElseFetch) -> Publishers.ApolloWatch<Query> {
     let config = Publishers.ApolloWatchConfiguration(client: self, query: query, cachePolicy: cachePolicy)
@@ -66,7 +65,7 @@ public extension ApolloClient {
   /// - Parameters:
   ///   - subscription: The subscription to subscribe to.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
-  /// - Returns: A publisher that delivers results from the subscribe operaion.
+  /// - Returns: A publisher that delivers results from the subscribe operation.
   func subscribePublisher<Subscription: GraphQLSubscription>(subscription: Subscription,
                                                              queue: DispatchQueue = .main) -> Publishers.ApolloSubscribe<Subscription> {
     let config = Publishers.ApolloSubscribeConfiguration(client: self, subscription: subscription, queue: queue)
@@ -76,8 +75,8 @@ public extension ApolloClient {
   /// Request to clear the cache
   ///
   /// - Parameters:
-  ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
-  /// - Returns: A publisher that delivers results from the cache operaion.
+  ///   - callbackQueue: The queue to fall back on. Defaults to the main queue.
+  /// - Returns: A publisher that delivers results from the clear operaion.
   func clearCachePublisher(queue: DispatchQueue = .main) -> Publishers.ApolloClearCache {
     let config = Publishers.ApolloClearCacheConfiguration(client: self,
                                                           queue: queue)

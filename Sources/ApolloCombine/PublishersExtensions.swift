@@ -27,7 +27,7 @@ public extension Publishers {
   }
   
   struct ApolloFetchConfiguration<Query: GraphQLQuery> {
-    let client: ApolloClient
+    let client: ApolloClientProtocol
     let query: Query
     let cachePolicy: CachePolicy
     let contextIdentifier: UUID?
@@ -91,8 +91,9 @@ public extension Publishers {
   }
   
   struct ApolloPerformConfiguration<Mutation: GraphQLMutation> {
-    let client: ApolloClient
+    let client: ApolloClientProtocol
     let mutation: Mutation
+    let publishResultToStore: Bool
     let queue: DispatchQueue
   }
   
@@ -109,6 +110,7 @@ public extension Publishers {
     
     func request(_ demand: Subscribers.Demand) {
       task = configuration.client.perform(mutation: configuration.mutation,
+                                          publishResultToStore: configuration.publishResultToStore,
                                           queue: configuration.queue)
       { [weak self] result in
         switch result {
@@ -147,7 +149,7 @@ public extension Publishers {
   }
   
   struct ApolloUploadConfiguration<Operation: GraphQLOperation> {
-    let client: ApolloClient
+    let client: ApolloClientProtocol
     let operation: Operation
     let files: [GraphQLFile]
     let queue: DispatchQueue
@@ -205,7 +207,7 @@ public extension Publishers {
   }
   
   struct ApolloWatchConfiguration<Query: GraphQLQuery> {
-    let client: ApolloClient
+    let client: ApolloClientProtocol
     let query: Query
     let cachePolicy: CachePolicy
   }
@@ -254,7 +256,7 @@ public extension Publishers {
   }
   
   struct ApolloSubscribeConfiguration<Subscription: GraphQLSubscription> {
-    let client: ApolloClient
+    let client: ApolloClientProtocol
     let subscription: Subscription
     let queue: DispatchQueue
   }
@@ -303,7 +305,7 @@ public extension Publishers {
   }
   
   struct ApolloClearCacheConfiguration {
-    let client: ApolloClient
+    let client: ApolloClientProtocol
     let queue: DispatchQueue
   }
   

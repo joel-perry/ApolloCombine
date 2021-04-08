@@ -75,7 +75,7 @@ public extension ApolloClientProtocol {
   /// Request to clear the cache
   ///
   /// - Parameters:
-  ///   - callbackQueue: The queue to fall back on. Defaults to the main queue.
+  ///   - callbackQueue: The queue to call back on. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the clear operaion.
   func clearCachePublisher(queue: DispatchQueue = .main) -> Publishers.ApolloClearCache {
     let config = Publishers.ApolloClearCacheConfiguration(client: self,

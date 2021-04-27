@@ -17,7 +17,7 @@ let package = Package(
   dependencies: [
     .package(name: "Apollo",
              url: "https://github.com/apollographql/apollo-ios.git",
-             .upToNextMajor(from: "0.38.0"))
+             .upToNextMajor(from: "0.43.0"))
   ],
   targets: [
     .target(name: "ApolloCombine", dependencies: [.product(name: "Apollo", package: "Apollo")])

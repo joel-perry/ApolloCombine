@@ -210,6 +210,7 @@ public extension Publishers {
     let client: ApolloClientProtocol
     let query: Query
     let cachePolicy: CachePolicy
+    let callbackQueue: DispatchQueue
   }
   
   private final class ApolloWatchSubscription<S: Subscriber, Query: GraphQLQuery>: Subscription
@@ -225,7 +226,8 @@ public extension Publishers {
     
     func request(_ demand: Subscribers.Demand) {
       task = configuration.client.watch(query: configuration.query,
-                                        cachePolicy: configuration.cachePolicy)
+                                        cachePolicy: configuration.cachePolicy,
+                                        callbackQueue: configuration.callbackQueue)
       { [weak self] result in
         _ = self?.subscriber?.receive(result)
       }

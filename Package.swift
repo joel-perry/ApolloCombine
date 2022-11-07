@@ -1,4 +1,4 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -15,11 +15,9 @@ let package = Package(
     .library(name: "ApolloCombine",targets: ["ApolloCombine"]),
   ],
   dependencies: [
-    .package(name: "Apollo",
-             url: "https://github.com/apollographql/apollo-ios.git",
-             .upToNextMajor(from: "0.43.0"))
+    .package(url: "https://github.com/apollographql/apollo-ios.git", .upToNextMajor(from: "1.0.0"))
   ],
   targets: [
-    .target(name: "ApolloCombine", dependencies: [.product(name: "Apollo", package: "Apollo")])
+    .target(name: "ApolloCombine", dependencies: [.product(name: "Apollo", package: "apollo-ios")])
   ]
 )

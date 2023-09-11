@@ -11,13 +11,20 @@ public extension ApolloClientProtocol {
   ///   - query: The query to fetch.
   ///   - cachePolicy: A cache policy that specifies when results should be fetched from the server and when data should be loaded from the local cache. Defaults to ``.default`.
   ///   - contextIdentifier: [optional] A unique identifier for this request, to help with deduping cache hits for watchers. Defaults to `nil`.
+  ///   - context: [optional] A context that is being passed through the request chain. Defaults to `nil`.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the fetch operation.
   func fetchPublisher<Query: GraphQLQuery>(query: Query,
                                            cachePolicy: CachePolicy = .default,
                                            contextIdentifier: UUID? = nil,
+                                           context: RequestContext? = nil,
                                            queue: DispatchQueue = .main) -> Publishers.ApolloFetch<Query> {
-    let config = Publishers.ApolloFetchConfiguration(client: self, query: query, cachePolicy: cachePolicy, contextIdentifier: contextIdentifier, queue: queue)
+    let config = Publishers.ApolloFetchConfiguration(client: self, 
+                                                     query: query,
+                                                     cachePolicy: cachePolicy,
+                                                     contextIdentifier: contextIdentifier,
+                                                     context: context,
+                                                     queue: queue)
     return Publishers.ApolloFetch(with: config)
   }
   
@@ -26,12 +33,18 @@ public extension ApolloClientProtocol {
   /// - Parameters:
   ///   - mutation: The mutation to perform.
   ///   - publishResultToStore: If `true`, this will publish the result returned from the operation to the cache store. Defaults to `true`.
+  ///   - context: [optional] A context that is being passed through the request chain. Defaults to `nil`.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the perform operation.
   func performPublisher<Mutation: GraphQLMutation>(mutation: Mutation,
                                                    publishResultToStore: Bool = true,
+                                                   context: RequestContext? = nil,
                                                    queue: DispatchQueue = .main) -> Publishers.ApolloPerform<Mutation> {
-    let config = Publishers.ApolloPerformConfiguration(client: self, mutation: mutation, publishResultToStore: publishResultToStore, queue: queue)
+    let config = Publishers.ApolloPerformConfiguration(client: self, 
+                                                       mutation: mutation,
+                                                       publishResultToStore: publishResultToStore,
+                                                       context: context,
+                                                       queue: queue)
     return Publishers.ApolloPerform(with: config)
   }
   
@@ -40,12 +53,18 @@ public extension ApolloClientProtocol {
   /// - Parameters:
   ///   - operation: The operation to send
   ///   - files: An array of `GraphQLFile` objects to send.
+  ///   - context: [optional] A context that is being passed through the request chain. Defaults to `nil`.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the upload operation.
   func uploadPublisher<Operation: GraphQLOperation>(operation: Operation,
                                                     files: [GraphQLFile],
+                                                    context: RequestContext? = nil,
                                                     queue: DispatchQueue = .main) -> Publishers.ApolloUpload<Operation> {
-    let config = Publishers.ApolloUploadConfiguration(client: self, operation: operation, files: files, queue: queue)
+    let config = Publishers.ApolloUploadConfiguration(client: self, 
+                                                      operation: operation,
+                                                      files: files,
+                                                      context: context,
+                                                      queue: queue)
     return Publishers.ApolloUpload(with: config)
   }
   
@@ -54,12 +73,18 @@ public extension ApolloClientProtocol {
   /// - Parameters:
   ///   - query: The query to watch.
   ///   - cachePolicy: A cache policy that specifies when results should be fetched from the server or from the local cache. Defaults to ``.default`
+  ///   - context: [optional] A context that is being passed through the request chain. Defaults to `nil`.
   ///   - callbackQueue: A dispatch queue on which the result handler will be called. Defaults to the main queue..
   /// - Returns: A publisher that delivers results from the watch operation.
   func watchPublisher<Query: GraphQLQuery>(query: Query,
                                            cachePolicy: CachePolicy = .default,
+                                           context: RequestContext? = nil,
                                            callbackQueue: DispatchQueue = .main) -> Publishers.ApolloWatch<Query> {
-    let config = Publishers.ApolloWatchConfiguration(client: self, query: query, cachePolicy: cachePolicy, callbackQueue: callbackQueue)
+    let config = Publishers.ApolloWatchConfiguration(client: self, 
+                                                     query: query,
+                                                     cachePolicy: cachePolicy,
+                                                     context: context,
+                                                     callbackQueue: callbackQueue)
     return Publishers.ApolloWatch(with: config)
   }
   
@@ -67,11 +92,16 @@ public extension ApolloClientProtocol {
   ///
   /// - Parameters:
   ///   - subscription: The subscription to subscribe to.
+  ///   - context: [optional] A context that is being passed through the request chain. Defaults to `nil`.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the subscribe operation.
   func subscribePublisher<Subscription: GraphQLSubscription>(subscription: Subscription,
+                                                             context: RequestContext? = nil,
                                                              queue: DispatchQueue = .main) -> Publishers.ApolloSubscribe<Subscription> {
-    let config = Publishers.ApolloSubscribeConfiguration(client: self, subscription: subscription, queue: queue)
+    let config = Publishers.ApolloSubscribeConfiguration(client: self, 
+                                                         subscription: subscription,
+                                                         context: context,
+                                                         queue: queue)
     return Publishers.ApolloSubscribe(with: config)
   }
   

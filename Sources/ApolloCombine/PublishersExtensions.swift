@@ -32,6 +32,7 @@ public extension Publishers {
     let query: Query
     let cachePolicy: CachePolicy
     let contextIdentifier: UUID?
+    let context: RequestContext?
     let queue: DispatchQueue
   }
   
@@ -50,6 +51,7 @@ public extension Publishers {
       task = configuration.client.fetch(query: configuration.query,
                                         cachePolicy: configuration.cachePolicy,
                                         contextIdentifier: configuration.contextIdentifier,
+                                        context: configuration.context,
                                         queue: configuration.queue)
       { [weak self] result in
         switch result {
@@ -95,6 +97,7 @@ public extension Publishers {
     let client: ApolloClientProtocol
     let mutation: Mutation
     let publishResultToStore: Bool
+    let context: RequestContext?
     let queue: DispatchQueue
   }
   
@@ -112,6 +115,7 @@ public extension Publishers {
     func request(_ demand: Subscribers.Demand) {
       task = configuration.client.perform(mutation: configuration.mutation,
                                           publishResultToStore: configuration.publishResultToStore,
+                                          context: configuration.context,
                                           queue: configuration.queue)
       { [weak self] result in
         switch result {
@@ -153,6 +157,7 @@ public extension Publishers {
     let client: ApolloClientProtocol
     let operation: Operation
     let files: [GraphQLFile]
+    let context: RequestContext?
     let queue: DispatchQueue
   }
   
@@ -170,6 +175,7 @@ public extension Publishers {
     func request(_ demand: Subscribers.Demand) {
       task = configuration.client.upload(operation: configuration.operation,
                                          files: configuration.files,
+                                         context: configuration.context,
                                          queue: configuration.queue)
       { [weak self] result in
         switch result {
@@ -211,6 +217,7 @@ public extension Publishers {
     let client: ApolloClientProtocol
     let query: Query
     let cachePolicy: CachePolicy
+    let context: RequestContext?
     let callbackQueue: DispatchQueue
   }
   
@@ -228,6 +235,7 @@ public extension Publishers {
     func request(_ demand: Subscribers.Demand) {
       task = configuration.client.watch(query: configuration.query,
                                         cachePolicy: configuration.cachePolicy,
+                                        context: configuration.context,
                                         callbackQueue: configuration.callbackQueue)
       { [weak self] result in
         _ = self?.subscriber?.receive(result)
@@ -261,6 +269,7 @@ public extension Publishers {
   struct ApolloSubscribeConfiguration<Subscription: GraphQLSubscription> {
     let client: ApolloClientProtocol
     let subscription: Subscription
+    let context: RequestContext?
     let queue: DispatchQueue
   }
   
@@ -277,6 +286,7 @@ public extension Publishers {
     
     func request(_ demand: Subscribers.Demand) {
       task = configuration.client.subscribe(subscription: configuration.subscription,
+                                            context: configuration.context,
                                             queue: configuration.queue)
       { [weak self] result in
         _ = self?.subscriber?.receive(result)

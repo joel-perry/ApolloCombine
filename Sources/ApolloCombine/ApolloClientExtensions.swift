@@ -1,7 +1,10 @@
 import Apollo
-import ApolloAPI
 import Combine
 import Foundation
+
+#if canImport(ApolloAPI)
+import ApolloAPI
+#endif
 
 public extension ApolloClientProtocol {
   

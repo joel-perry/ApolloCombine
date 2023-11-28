@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ApolloCombine'
-  s.version          = '0.5.0'
+  s.version          = '0.7.0'
   s.author           = { 'Joel Perry' => 'joel@joelperry.net' }
   s.homepage         = 'https://github.com/joel-perry/ApolloCombine'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/ApolloCombine/*.swift'
 
   s.weak_frameworks = 'SwiftUI', 'Combine'
-  s.dependency 'Apollo/Core', '>=0.43.0'
-  s.swift_version = '5.2'
+  s.dependency 'Apollo/Core', '~> 1.5'
+  s.swift_version = '5.6'
 
 end

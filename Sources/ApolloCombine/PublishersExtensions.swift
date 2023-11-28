@@ -1,7 +1,10 @@
 import Apollo
-import ApolloAPI
 import Combine
 import Foundation
+
+#if canImport(ApolloAPI)
+import ApolloAPI
+#endif
 
 // Each operation type has 3 elements:
 //  1. A Publisher instance.

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ApolloCombine'
-  s.version          = '0.7.0'
+  s.version          = '0.7.1'
   s.author           = { 'Joel Perry' => 'joel@joelperry.net' }
   s.homepage         = 'https://github.com/joel-perry/ApolloCombine'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }

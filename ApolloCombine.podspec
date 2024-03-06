@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/ApolloCombine/*.swift'
 
   s.weak_frameworks = 'SwiftUI', 'Combine'
-  s.dependency 'Apollo/Core', '~> 1.5'
+  s.dependency 'Apollo/Core', '~> 1.9'
   s.swift_version = '5.6'
 
 end

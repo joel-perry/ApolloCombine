@@ -100,6 +100,7 @@ public extension Publishers {
     let client: ApolloClientProtocol
     let mutation: Mutation
     let publishResultToStore: Bool
+    let contextIdentifier: UUID?
     let context: RequestContext?
     let queue: DispatchQueue
   }
@@ -118,6 +119,7 @@ public extension Publishers {
     func request(_ demand: Subscribers.Demand) {
       task = configuration.client.perform(mutation: configuration.mutation,
                                           publishResultToStore: configuration.publishResultToStore,
+                                          contextIdentifier: configuration.contextIdentifier,
                                           context: configuration.context,
                                           queue: configuration.queue)
       { [weak self] result in

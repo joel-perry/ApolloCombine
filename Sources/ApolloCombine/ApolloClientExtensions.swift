@@ -13,7 +13,7 @@ public extension ApolloClientProtocol {
   /// - Parameters:
   ///   - query: The query to fetch.
   ///   - cachePolicy: A cache policy that specifies when results should be fetched from the server and when data should be loaded from the local cache. Defaults to ``.default`.
-  ///   - contextIdentifier: [optional] A unique identifier for this request, to help with deduping cache hits for watchers. Defaults to `nil`.
+  ///   - contextIdentifier: [optional] A unique identifier for this request, to help with deduping cache hits for watchers. Should default to `nil`.
   ///   - context: [optional] A context that is being passed through the request chain. Defaults to `nil`.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the fetch operation.
@@ -36,16 +36,19 @@ public extension ApolloClientProtocol {
   /// - Parameters:
   ///   - mutation: The mutation to perform.
   ///   - publishResultToStore: If `true`, this will publish the result returned from the operation to the cache store. Defaults to `true`.
+  ///   - contextIdentifier: [optional] A unique identifier for this request, to help with deduping cache hits for watchers. Should default to `nil`.
   ///   - context: [optional] A context that is being passed through the request chain. Defaults to `nil`.
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the perform operation.
   func performPublisher<Mutation: GraphQLMutation>(mutation: Mutation,
                                                    publishResultToStore: Bool = true,
+                                                   contextIdentifier: UUID? = nil,
                                                    context: RequestContext? = nil,
                                                    queue: DispatchQueue = .main) -> Publishers.ApolloPerform<Mutation> {
     let config = Publishers.ApolloPerformConfiguration(client: self, 
                                                        mutation: mutation,
                                                        publishResultToStore: publishResultToStore,
+                                                       contextIdentifier: contextIdentifier,
                                                        context: context,
                                                        queue: queue)
     return Publishers.ApolloPerform(with: config)
